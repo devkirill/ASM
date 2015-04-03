@@ -32,67 +32,52 @@
         push    cx 0000h
         call    @printline
 
-        mov     [bp - 4], 004Ah
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 4Ah
         call    @printline
 
-        mov     [bp - 4], 004Fh
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 4Fh
         call    @printline
 
-        mov     [bp - 4], 004Dh
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 4Dh
         call    @printline
 
 
-        mov     [bp - 4], 0029
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 29h
         call    @printline
 
-        mov     [bp - 4], 002Bh
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 2Bh
         call    @printline
 
-        mov     [bp - 4], 002Ch
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 2Ch
         call    @printline
 
-        mov     [bp - 4], 0028h
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 28h
         call    @printline
 
 
-        mov     [bp - 4], 0097h
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 97h
         call    @printline
 
-        mov     [bp - 4], 0096h
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 96h
         call    @printline
 
-        mov     [bp - 4], 0094h
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 94h
         call    @printline
 
-        mov     [bp - 4], 0013h
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 13h
         call    @printline
 
 
-        mov     [bp - 4], 0072h
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 72h
         call    @printline
 
-        mov     [bp - 4], 0071h
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 71h
         call    @printline
 
-        mov     [bp - 4], 00F0h
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], (80h + 70h)
         call    @printline
 
-        mov     [bp - 4], 0075h
-        mov     [bp - 3], ch
+        mov     byte ptr [bp - 4], 75h
         call    @printline
 
         mov     ah, 02h
@@ -152,8 +137,8 @@
 
         jmp     @printline_1
 @printline_2:
-        add     [bp + 6], 10h
-        add     [bp + 10], 100h
+        add     word ptr [bp + 6], 0010h
+        add     word ptr [bp + 10], 0100h
         pop     dx cx bx ax bp
         popf
         ret
