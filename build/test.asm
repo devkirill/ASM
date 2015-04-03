@@ -1,0 +1,2 @@
+#replace "write \"", "hello"
+write "=)
