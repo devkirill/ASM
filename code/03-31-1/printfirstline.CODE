@@ -1,0 +1,62 @@
+printfirstline:
+        pushf
+        push    bp
+        mov     bp, sp
+        push    ax bx cx dx
+
+;for (byte i = 0; i < 31; i++)
+;{
+;        if (i & 1)
+;                bx = ' ' + 08h
+;        else
+;                bx = i << 7 + 04h
+;                if (i & 2)
+;                        bx += 80h
+;        pop ax
+;        inc ax
+;        push ax
+;}
+
+        mov     dx, 0
+        mov     ah, sy
+        mov     al, sx
+        push    ax
+@printfirstline1:
+        cmp     dx, 1Fh
+        je      @printfirstline2
+
+        mov     ax, dx
+        and     ax, 1
+        cmp     ax, 0
+        je      @printfirstline3
+        mov     bx, nullchar            ; null char && space color
+        jmp     @printfirstline4
+@printfirstline3:
+        mov     bx, dx
+        shl     bx, 7
+        mov     bh, char
+        inc     char
+        mov     bl, 40h                 ; color first line
+
+        mov     ax, dx
+        and     ax, 2
+        cmp     ax, 0
+        je      @printfirstline4
+        cmp     w_blink, 0
+        jne     @printfirstline4
+        add     bl, 80h                 ; add blink
+@printfirstline4:
+        push    bx
+
+        call    printchar
+
+        pop     ax
+        inc     ax                      ; shift pos
+        inc     dx                      ; shift char
+        push    ax
+        jmp     @printfirstline1
+
+@printfirstline2:
+        pop     ax dx cx bx ax bp
+        popf
+        ret

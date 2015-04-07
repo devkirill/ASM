@@ -1,0 +1,111 @@
+#replace "([\t ])+", " "
+#replace ";.*\n", "\n"
+#replace "(^|\n)[\t ]([\w.]+)[\t ]", "\1\t\2\t"
+#replace "(^|\n)[\t ]([\w.]+)", "\1\t\2"
+#replace "\n([\t ]*\n)+\n", "\n\n"
+;func
+#replace "(\w+)\(([\w']+),[\t ]*([\w']+)\)", "push\t\3\n\tpush\t\2\n\tcall\t\1"
+#replace "\bnullchar\b", "0040h"
+	.model tiny
+	.code
+	org 100h
+@main:
+	jmp @start
+
+	mes db 'wrong mode$'
+	mes2 db 'wrong page$'
+	w_mode db ?
+	w_page db ?
+        w_blink db ?
+	sizeX db ?
+	sizeY db ?
+        sx db ?
+        sy db ?
+        color db ?
+        char db 0
+
+#include "..\lib\args.CODE"
+#include "..\lib\exit.CODE"
+#include "printchar.CODE"
+#include "printline.CODE"
+#include "printfirstline.CODE"
+#include "printsecondline.CODE"
+#include "printtable.CODE"
+
+checkmode:
+        pushf
+        push    ax
+        mov     al, w_mode
+        
+        cmp     al, 03
+        jbe     @checkmode1
+        cmp     al, 07
+        je      @checkmode1
+
+        mov     ah, 09h
+        lea     dx, mes
+        int     21h
+        jmp     exit
+@checkmode1:
+        pop     ax
+        popf
+	ret
+
+checkpage:
+        pushf
+        push    ax
+        mov     ah, w_mode
+        mov     al, w_page
+        
+        cmp     al, 0
+        je      @checkpage1
+        cmp     ah, 07
+        je      @checkpage2
+        cmp     al, 07
+        jbe     @checkpage1
+@checkpage2:
+        mov     ah, 09h
+        lea     dx, mes
+        int     21h
+        jmp     exit
+@checkpage1:
+        pop     ax
+        popf
+        ret
+
+@start:
+        args('M', 0)
+	pop	ax
+	mov	w_mode, al
+
+        args('P', 0)
+	pop	ax
+	mov	w_page, al
+
+        args('B', 1)
+        pop     ax
+        mov     w_blink, al
+
+	call	checkmode
+	call	checkpage
+
+	mov	ah, 00h
+	mov	al, w_mode
+	int	10h			; set mode
+
+	mov	ah, 05h
+	mov	al, w_page
+	int	10h			; set page
+
+        mov     ah, 0Fh
+        int     10h                     ; get size
+        mov     sizeX, ah
+        mov     sizeY, 25
+
+	call	printtable
+
+	mov	ah, 00h
+	int	16h			; pause
+
+	jmp	exit
+end @main

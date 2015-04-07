@@ -1,0 +1,180 @@
+printtable:
+        push    bp
+        mov     bp, sp
+
+        xor     ah, ah
+        mov     al, sizeX
+        mov     bx, 1Fh
+        sub     ax, bx
+        mov     bl, 02h
+        div     bl
+        mov     sx, al
+
+        xor     ah, ah
+        mov     al, sizeY
+        mov     bx, 10h
+        sub     ax, bx
+        mov     bl, 02h
+        div     bl
+        mov     sy, al
+
+        mov     char, 0
+
+        call    printmodepage
+       
+        call    printfirstline
+        inc     sy
+        call    printsecondline
+        inc     sy
+        call    printline
+        inc     sy
+        call    printline
+        inc     sy
+
+        call    printline
+        inc     sy
+        call    printline
+        inc     sy
+        call    printline
+        inc     sy
+        call    printline
+        inc     sy
+
+        call    printline
+        inc     sy
+        call    printline
+        inc     sy
+        call    printline
+        inc     sy
+        call    printline
+        inc     sy
+
+        call    printline
+        inc     sy
+        call    printline
+        inc     sy
+        call    printline
+        inc     sy
+        call    printline
+
+        mov     sp, bp
+        pop     bp
+        ret
+
+printmodepage:
+        pushf
+        push    bp
+        mov     bp, sp
+        push    ax bx
+
+        dec     sy
+
+        mov     ah, sy
+        mov     al, sx
+        add     ax, 5
+
+        mov     bh, 'M'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, 'O'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, 'D'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, 'E'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, ' '
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, '='
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, ' '
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, w_mode
+        add     bh, '0'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        add     ax, 5                   ; shift for page
+
+        mov     bh, 'P'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, 'A'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, 'G'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, 'E'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, ' '
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, '='
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, ' '
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        mov     bh, w_page
+        add     bh, '0'
+        mov     bl, 07h
+        printchar(bx, ax)
+        pop     ax
+        inc     ax
+
+        add     sy, 2
+
+        pop     bx ax bp
+        popf
+        ret

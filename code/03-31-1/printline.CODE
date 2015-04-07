@@ -1,0 +1,39 @@
+printline:
+        pushf
+        push    bp
+        mov     bp, sp
+        push    ax bx cx dx
+
+        mov     dx, 00h
+        mov     ah, sy
+        mov     al, sx
+        push    ax
+@printline1:
+        cmp     dx, 1Fh
+        je      @printline2
+
+        mov     ax, dx
+        and     ax, 1
+        cmp     ax, 0
+        je      @printline3
+        mov     bx, nullchar            ; null char && space color
+        jmp     @printline4
+@printline3:
+        mov     bh, char
+        inc     char
+        mov     bl, 46h
+@printline4:
+        push    bx
+
+        call    printchar
+
+        pop     ax
+        inc     ax                      ; shift pos
+        inc     dx                      ; shift char
+        push    ax
+        jmp     @printline1
+
+@printline2:
+        pop     ax dx cx bx ax bp
+        popf
+        ret

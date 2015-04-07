@@ -1,0 +1,57 @@
+args:
+        pushf
+        push    bp
+        mov     bp, sp
+        push    ax bx cx dx si di
+
+        mov     si, 0080h
+        mov     di, si
+        mov     bx, 0000h
+        mov     bl, ds:di
+        add     di, bx
+
+        cmp     bx, 0
+        je      @args5                  ; bx == 0
+        mov     cx, [bp + 6]
+@args1:
+        inc     si
+        mov     ch, ds:si
+        cmp     ch, 20h
+        jne     @args4                  ; ch != 20h
+
+        inc     si
+        mov     ch, ds:si
+        cmp     ch, 'a'
+        jb      @args2                  ; ch < 'a'
+        cmp     ch, 'z'
+        ja      @args2                  ; ch > 'z'
+        sub     ch, 20h                 ; 'a' -> 'A'
+@args2:
+        cmp     ch, cl
+        jne     @args4                  ; ch != cl
+
+        xor     ax, ax
+        mov     [bp + 8], ax
+@args3:
+        inc     si
+        xor     dx, dx
+        mov     dl, ds:si
+        cmp     dl, '0'
+        jb      @args4
+        cmp     dl, '9'
+        ja      @args4
+        sub     dl, '0'
+        push    dx
+        mov     dx, 10
+        mul     dx
+        pop     dx
+        add     ax, dx
+        mov     [bp + 8], ax
+        jmp     @args3
+@args4:
+        cmp     si, di
+        jb      @args1                  ; si < di
+@args5:
+        pop     di si dx cx bx ax bp
+        popf
+        ret     2

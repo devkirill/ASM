@@ -1,0 +1,37 @@
+printchar:
+;       stack:
+;               pos (y, x)
+;               char (ch, attr)
+        pushf
+        push    bp
+        mov     bp, sp
+        push    ax bx cx dx es
+
+        xor     bx, bx
+        mov     bx, 0000h
+        mov     es, bx
+        mov     bx, es:44Eh
+        shr     bx, 4
+        add     bx, 0B800h
+        mov     es, bx
+
+        xor     ax, ax
+        mov     al, [bp + 9]
+        mov     bl, sizeX
+        mul     bl
+        xor     bx, bx
+        mov     bl, [bp + 8]
+        add     ax, bx
+        mov     bx, 2
+        mul     bx
+        mov     di, ax                  ; di - смещение
+
+        mov     al, [bp + 7]
+        mov     es:[di], al
+        inc     di
+        mov     al, [bp + 6]
+        mov     es:[di], al
+
+        pop     es dx cx bx ax bp
+        popf
+        ret     2
