@@ -1,0 +1,26 @@
+print:
+	push	bp
+	mov	bp, sp
+	push	ax bx cx dx
+	push	-1
+	mov	ax, [bp + 4]
+	mov	cx, 10
+@print1:
+	xor	dx, dx
+	div	cx
+	push	dx
+	cmp	ax, 0
+	jne	@print1			; ax != 1
+	mov	ah, 02h
+@print2:
+	pop	dx
+	cmp	dx, -1
+	je	@print3			; dx == -1
+	add	dl, '0'
+	int	21h
+	jmp	@print2
+@print3:
+;	mov	dl, 20h
+;	int	21h
+	pop	dx cx bx ax bp
+	ret	2

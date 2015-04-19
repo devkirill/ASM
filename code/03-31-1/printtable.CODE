@@ -71,7 +71,7 @@ printmodepage:
 
         mov     ah, sy
         mov     al, sx
-        add     ax, 5
+        add     ax, 11
 
         mov     bh, 'M'
         mov     bl, 07h
@@ -122,7 +122,8 @@ printmodepage:
         pop     ax
         inc     ax
 
-        add     ax, 5                   ; shift for page
+        add     ax, 100h                   ; shift for page
+        sub     ax, 8
 
         mov     bh, 'P'
         mov     bl, 07h
@@ -173,7 +174,7 @@ printmodepage:
         pop     ax
         inc     ax
 
-        add     sy, 2
+        add     sy, 3
 
         pop     bx ax bp
         popf

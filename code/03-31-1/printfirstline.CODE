@@ -42,8 +42,6 @@ printfirstline:
         and     ax, 2
         cmp     ax, 0
         je      @printfirstline4
-        cmp     w_blink, 0
-        jne     @printfirstline4
         add     bl, 80h                 ; add blink
 @printfirstline4:
         push    bx

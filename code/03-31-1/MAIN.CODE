@@ -1,10 +1,10 @@
-#replace "([\t ])+", " "
+
 #replace ";.*\n", "\n"
 #replace "(^|\n)[\t ]([\w.]+)[\t ]", "\1\t\2\t"
 #replace "(^|\n)[\t ]([\w.]+)", "\1\t\2"
 #replace "\n([\t ]*\n)+\n", "\n\n"
 ;func
-#replace "(\w+)\(([\w']+),[\t ]*([\w']+)\)", "push\t\3\n\tpush\t\2\n\tcall\t\1"
+#replace "(\w+)\(([\w']+),[\t ]*([\w']+)\)", "push\t\3\t\2\n\tcall\t\1"
 #replace "\bnullchar\b", "0040h"
 	.model tiny
 	.code
@@ -101,6 +101,11 @@ checkpage:
         int     10h                     ; get size
         mov     sizeX, ah
         mov     sizeY, 25
+
+        and     w_blink, 1
+        mov     bl, w_blink
+        mov     ax, 1003h
+        int     10h                     ; set blink
 
 	call	printtable
 

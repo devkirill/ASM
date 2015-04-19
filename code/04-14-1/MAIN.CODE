@@ -1,0 +1,60 @@
+#replace ";.*\n", "\n"
+#replace "(^|\n)[\t ]([\w.]+)[\t ]", "\1\t\2\t"
+#replace "(^|\n)[\t ]([\w.]+)", "\1\t\2"
+#replace "\n([\t ]*\n)+\n", "\n\n"
+#replace "(\w+)\(\)", "call\t\1"
+#replace "(\w+)\(([\w']+)\)", "push\t\2\n\tcall\t\1"
+#replace "(\w+)\(([\w']+),[\t ]*([\w']+)\)", "push\t\3\t\2\n\tcall\t\1"
+	.model tiny
+	.code
+	org 100h
+@main:
+	jmp	@start
+
+help db 'SCAN', 9, 'ASCII', 9, 'CHAR', 13, 10, '$'
+separator db 9, '$'
+separator2 db 13, '$'
+
+#include "..\lib\exit.CODE"
+#include "..\lib\print.CODE"
+#include "..\lib\printchar.CODE"
+
+@start:
+	mov	DX, CS
+	mov	DS, DX
+
+	lea	DX, help
+	mov	AH, 09h
+	int	21h
+
+mainwhile:
+	mov	AH, 00h
+	int	16h
+
+	cmp	al, 1Bh
+	je	exit
+
+	mov	bh, 07h
+	mov	bl, al
+	push	bx
+
+	xor	bh, bh
+	push	bx
+
+	mov	bl, ah
+	push	bx
+
+	mov	AH, 09h
+	lea	DX, separator
+	print()
+	int	21h
+
+	print()
+	int	21h
+
+	printchar()
+	lea	DX, separator2
+	int	21h
+
+	jmp	mainwhile
+end @main

@@ -12,7 +12,11 @@ printchar:
         mov     es, bx
         mov     bx, es:44Eh
         shr     bx, 4
-        add     bx, 0B800h
+        add     bx, 0B000h
+        cmp     w_mode, 7
+        je      @printchar2
+        add     bx, 00800h
+@printchar2:
         mov     es, bx
 
         xor     ax, ax
